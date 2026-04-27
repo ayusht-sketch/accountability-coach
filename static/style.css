@@ -1,0 +1,563 @@
+:root {
+  --bg: #0c1014;
+  --bg-elev: #131a21;
+  --bg-elev-2: #1a242d;
+  --border: #223240;
+  --text: #e6eef5;
+  --muted: #8a9aa9;
+  --accent: #2dd4bf;        /* teal */
+  --accent-strong: #14b8a6;
+  --accent-soft: rgba(45, 212, 191, 0.12);
+  --success: #34d399;
+  --danger: #f87171;
+  --warn: #fbbf24;
+
+  /* Coach tone palette — keep these in sync with the four tones in coach.py */
+  --tone-celebration:  #34d399;  /* green   */
+  --tone-motivational: #facc15;  /* yellow  */
+  --tone-empathy:      #60a5fa;  /* blue    */
+  --tone-reengagement: #fb923c;  /* orange  */
+  --tone-celebration-soft:  rgba(52, 211, 153, 0.14);
+  --tone-motivational-soft: rgba(250, 204, 21, 0.14);
+  --tone-empathy-soft:      rgba(96, 165, 250, 0.14);
+  --tone-reengagement-soft: rgba(251, 146, 60, 0.14);
+  --radius: 10px;
+  --radius-sm: 6px;
+  --shadow: 0 1px 0 rgba(255, 255, 255, 0.03), 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  background: radial-gradient(1200px 600px at 80% -10%, rgba(45, 212, 191, 0.08), transparent 60%), var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, sans-serif;
+  font-size: 15px;
+  line-height: 1.55;
+  min-height: 100vh;
+}
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { color: var(--accent-strong); }
+
+h1, h2, h3 { color: var(--text); margin: 0 0 0.5em; letter-spacing: -0.01em; }
+h1 { font-size: 2rem; font-weight: 650; }
+h2 { font-size: 1.4rem; font-weight: 600; }
+h3 { font-size: 1.1rem; font-weight: 600; }
+
+.muted { color: var(--muted); }
+
+/* Layout */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 32px;
+  border-bottom: 1px solid var(--border);
+  background: rgba(12, 16, 20, 0.7);
+  backdrop-filter: blur(8px);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+.brand {
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+.brand-mark { color: var(--accent); margin-right: 6px; }
+.topbar nav a {
+  margin-left: 22px;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+.topbar nav a:hover { color: var(--text); }
+
+.container {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 40px 24px 80px;
+}
+
+.footer {
+  text-align: center;
+  color: var(--muted);
+  padding: 24px;
+  font-size: 0.85rem;
+}
+
+/* Buttons */
+.btn {
+  display: inline-block;
+  padding: 10px 18px;
+  border-radius: var(--radius-sm);
+  font-weight: 550;
+  font-size: 0.95rem;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: transform 0.05s ease, background 0.15s ease, border-color 0.15s ease;
+}
+.btn:hover { transform: translateY(-1px); }
+.btn-primary {
+  background: var(--accent);
+  color: #06272a;
+}
+.btn-primary:hover { background: var(--accent-strong); color: #06272a; }
+.btn-ghost {
+  background: transparent;
+  border-color: var(--border);
+  color: var(--text);
+}
+.btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+.btn-sm { padding: 6px 12px; font-size: 0.85rem; }
+
+/* Flash */
+.flash-stack { margin-bottom: 24px; display: flex; flex-direction: column; gap: 8px; }
+.flash {
+  padding: 12px 16px;
+  border-radius: var(--radius-sm);
+  border-left: 3px solid var(--border);
+  background: var(--bg-elev);
+}
+.flash-success { border-left-color: var(--success); }
+.flash-error   { border-left-color: var(--danger); }
+
+/* Hero */
+.hero {
+  text-align: center;
+  padding: 60px 0 48px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 48px;
+}
+.hero h1 {
+  font-size: 2.6rem;
+  background: linear-gradient(180deg, #ffffff, #b8cad6);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.hero .lead {
+  max-width: 620px;
+  margin: 0 auto 28px;
+  color: var(--muted);
+  font-size: 1.05rem;
+}
+.cta-row { display: flex; justify-content: center; gap: 12px; }
+
+/* Features */
+.features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+}
+.feature-card {
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 22px;
+}
+.feature-card h3 { color: var(--accent); }
+
+/* Forms */
+.form-card {
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px;
+  max-width: 560px;
+  box-shadow: var(--shadow);
+}
+.form-card label {
+  display: block;
+  margin-bottom: 16px;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+.form-card input,
+.form-card textarea,
+.form-card select {
+  display: block;
+  width: 100%;
+  margin-top: 6px;
+  padding: 10px 12px;
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font: inherit;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.form-card input:focus,
+.form-card textarea:focus,
+.form-card select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.form-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+/* Dashboard */
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 28px;
+  gap: 16px;
+}
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  background: var(--bg-elev);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+}
+.goal-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.goal-card {
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: border-color 0.15s ease;
+}
+.goal-card:hover { border-color: var(--accent); }
+.goal-title-link { color: var(--text); }
+.goal-title-link:hover { color: var(--accent); }
+.goal-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+.goal-card-head h3 { margin: 0; }
+.pill {
+  background: var(--accent-soft);
+  color: var(--accent);
+  border-radius: 999px;
+  padding: 3px 10px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: lowercase;
+}
+.goal-card-foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+  font-size: 0.85rem;
+}
+
+/* ----- Progress bar (color-banded, animated, with milestone dots) ----- */
+
+/* Color bands -- one CSS variable per band keeps tweaking trivial. */
+:root {
+  --band-red:    #ef4444;
+  --band-red-2:  #b91c1c;
+  --band-orange: #fb923c;
+  --band-orange-2: #c2410c;
+  --band-yellow: #facc15;
+  --band-yellow-2: #a16207;
+  --band-green:  #34d399;
+  --band-green-2: #15803d;
+}
+
+.progress {
+  position: relative;
+  /* milestones bulge above the track, so don't clip them */
+  overflow: visible;
+  margin-top: 4px;
+  height: 14px;
+}
+.progress-track {
+  height: 10px;
+  margin-top: 2px;
+  background: var(--bg-elev-2);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  border-radius: 999px;
+  /* width is set inline (0..100%); animate via scaleX so the inline width
+     stays the source of truth and the bar grows in from the left on load. */
+  transform-origin: left center;
+  animation: progress-grow 900ms cubic-bezier(.2, .7, .3, 1) both;
+}
+.progress-fill[data-band="red"]    { background: linear-gradient(90deg, var(--band-red-2),    var(--band-red)); }
+.progress-fill[data-band="orange"] { background: linear-gradient(90deg, var(--band-orange-2), var(--band-orange)); }
+.progress-fill[data-band="yellow"] { background: linear-gradient(90deg, var(--band-yellow-2), var(--band-yellow)); }
+.progress-fill[data-band="green"]  { background: linear-gradient(90deg, var(--band-green-2),  var(--band-green)); }
+
+@keyframes progress-grow {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+/* Milestone dots positioned ON the bar at 25/50/75/100%. */
+.milestone {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  font-size: 10px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  background: var(--bg);
+  border: 2px solid var(--border);
+  color: transparent;
+}
+.milestone-unlocked {
+  background: var(--success);
+  border-color: var(--success);
+  color: #062712;
+}
+.milestone-locked {
+  background: var(--bg);
+}
+
+.progress-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-top: 6px;
+}
+.progress-pct { font-weight: 700; font-variant-numeric: tabular-nums; }
+.progress-pct-red    { color: var(--band-red); }
+.progress-pct-orange { color: var(--band-orange); }
+.progress-pct-yellow { color: var(--band-yellow); }
+.progress-pct-green  { color: var(--band-green); }
+
+/* ----- Goal stats row (streak calendar + mood timeline) ----- */
+.goal-stats {
+  display: grid;
+  grid-template-columns: minmax(0, auto) minmax(0, 1fr);
+  gap: 24px;
+  margin-top: 8px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+}
+@media (max-width: 640px) {
+  .goal-stats { grid-template-columns: 1fr; }
+}
+.stat-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+.stat-head h4 {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  margin: 0;
+}
+.small { font-size: 0.85rem; }
+
+/* ----- Streak calendar (4 weeks x 7 days, GitHub-style) ----- */
+.streak-count {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+.streak-flame { color: var(--success); font-size: 0.7rem; }
+.streak-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-auto-rows: 1fr;
+  gap: 4px;
+  width: 168px; /* 7 cells * ~20px + gaps; locks the calendar to a tidy size */
+}
+.streak-cell {
+  aspect-ratio: 1;
+  background: var(--bg-elev-2);
+  border-radius: 3px;
+  border: 1px solid transparent;
+  /* gentle stagger so cells don't all pop in identically */
+  animation: streak-pop 350ms ease both;
+}
+.streak-cell-active {
+  background: linear-gradient(135deg, var(--band-green-2), var(--band-green));
+  border-color: rgba(52, 211, 153, 0.4);
+}
+@keyframes streak-pop {
+  from { opacity: 0; transform: scale(0.7); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* ----- Mood timeline (horizontal dots on a connecting line) ----- */
+.mood { min-width: 0; } /* let it shrink in the grid cell */
+.timeline {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 14px 4px;
+  min-height: 28px;
+}
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 4px;
+  right: 4px;
+  top: 50%;
+  height: 1px;
+  background: var(--border);
+  z-index: 0;
+}
+.mood-dot {
+  position: relative;  /* float above the connecting line */
+  z-index: 1;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  box-shadow: 0 0 0 2px var(--bg-elev);
+  /* match the streak cells' subtle entrance */
+  animation: streak-pop 350ms ease both;
+}
+.mood-happy      { background: var(--success); }
+.mood-neutral    { background: var(--muted); }
+.mood-frustrated { background: var(--danger); }
+.mood-anxious    { background: #a78bfa; } /* purple — distinct from frustrated */
+
+/* Check-in */
+.back-link {
+  display: inline-block;
+  color: var(--muted);
+  margin-bottom: 12px;
+  font-size: 0.9rem;
+}
+.back-link:hover { color: var(--accent); }
+
+/* Recent check-ins inside a goal card */
+.checkin-history {
+  margin-top: 8px;
+  border-top: 1px solid var(--border);
+  padding-top: 16px;
+}
+.checkin-history h4 {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  margin: 0 0 12px;
+}
+
+.coach-card {
+  border: 1px solid var(--border);
+  border-left-width: 4px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-elev-2);
+  padding: 16px;
+  margin-bottom: 12px;
+}
+.coach-card-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+  font-size: 0.85rem;
+}
+.coach-card-foot {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  font-size: 0.8rem;
+  margin-top: 8px;
+}
+.coach-message {
+  font-size: 0.98rem;
+  margin: 6px 0 12px;
+  line-height: 1.5;
+}
+.user-note {
+  font-size: 0.9rem;
+  font-style: italic;
+  color: var(--text);
+  margin: 4px 0 12px;
+  padding-left: 10px;
+  border-left: 2px solid var(--border);
+}
+
+/* Color-coded coach card border-left per tone */
+.coach-celebration  { border-left-color: var(--tone-celebration); }
+.coach-motivational { border-left-color: var(--tone-motivational); }
+.coach-empathy      { border-left-color: var(--tone-empathy); }
+.coach-reengagement { border-left-color: var(--tone-reengagement); }
+
+/* Highlighted action item — strong tone tint, prominent label */
+.coach-action {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  margin: 8px 0 4px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+.coach-action .action-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.coach-action .action-text { color: var(--text); }
+.coach-action-celebration  { background: var(--tone-celebration-soft);  border-color: var(--tone-celebration); }
+.coach-action-motivational { background: var(--tone-motivational-soft); border-color: var(--tone-motivational); }
+.coach-action-empathy      { background: var(--tone-empathy-soft);      border-color: var(--tone-empathy); }
+.coach-action-reengagement { background: var(--tone-reengagement-soft); border-color: var(--tone-reengagement); }
+.coach-action-celebration  .action-label { background: var(--tone-celebration);  color: #06272a; }
+.coach-action-motivational .action-label { background: var(--tone-motivational); color: #2a1f06; }
+.coach-action-empathy      .action-label { background: var(--tone-empathy);      color: #06182a; }
+.coach-action-reengagement .action-label { background: var(--tone-reengagement); color: #2a1306; }
+
+/* Tone tag pills */
+.tone-tag {
+  display: inline-block;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 999px;
+}
+.tone-celebration  { background: var(--tone-celebration-soft);  color: var(--tone-celebration); }
+.tone-motivational { background: var(--tone-motivational-soft); color: var(--tone-motivational); }
+.tone-empathy      { background: var(--tone-empathy-soft);      color: var(--tone-empathy); }
+.tone-reengagement { background: var(--tone-reengagement-soft); color: var(--tone-reengagement); }

@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+{% block title %}Dashboard · Accountability Coach{% endblock %}
+{% block content %}
+<section class="dashboard-header">
+  <div>
+    <h1>Your goals</h1>
+    {% if name_filter %}
+      <p class="muted">Showing goals for <strong>{{ name_filter }}</strong> ·
+        <a href="{{ url_for('coach.dashboard') }}">show all</a>
+      </p>
+    {% else %}
+      <p class="muted">Everything currently being tracked.</p>
+    {% endif %}
+  </div>
+  <a class="btn btn-primary" href="{{ url_for('coach.new_goal_form') }}">+ New goal</a>
+</section>
+
+{% if not goals %}
+  <div class="empty-state">
+    <h3>Nothing here yet.</h3>
+    <p>Set your first goal to start getting coached.</p>
+    <a class="btn btn-primary" href="{{ url_for('coach.new_goal_form') }}">Set a goal</a>
+  </div>
+{% else %}
+  <div class="goal-list">
+    {% for goal in goals %}
+      <article class="goal-card">
+        <header class="goal-card-head">
+          <h3>
+            <a class="goal-title-link"
+               href="{{ url_for('coach.checkin_form', goal_id=goal.id) }}">{{ goal.title }}</a>
+          </h3>
+          <span class="pill">{{ goal.name }}</span>
+        </header>
+        {% if goal.description %}
+          <p class="muted">{{ goal.description }}</p>
+        {% endif %}
+
+        <div class="progress" data-band="{{ goal.progress_band }}">
+          <div class="progress-track">
+            <div class="progress-fill"
+                 data-band="{{ goal.progress_band }}"
+                 style="width: {{ goal.progress_pct }}%;"></div>
+          </div>
+          {% for m in goal.milestones %}
+            <span class="milestone {% if m.unlocked %}milestone-unlocked{% else %}milestone-locked{% endif %}"
+                  style="left: {{ m.pct }}%;"
+                  title="{{ m.pct }}% milestone{% if m.unlocked %} — unlocked{% endif %}">
+              {% if m.unlocked %}✓{% endif %}
+            </span>
+          {% endfor %}
+        </div>
+        <div class="progress-meta">
+          <span>{{ goal.current_value }} of {{ goal.target_value }}</span>
+          <span class="progress-pct progress-pct-{{ goal.progress_band }}">{{ goal.progress_pct }}%</span>
+        </div>
+
+        <div class="goal-stats">
+          <section class="streak">
+            <header class="stat-head">
+              <h4>Check-in streak</h4>
+              <span class="streak-count">
+                <span class="streak-flame">●</span>
+                {{ goal.current_streak }} day{% if goal.current_streak != 1 %}s{% endif %}
+              </span>
+            </header>
+            <div class="streak-grid" aria-label="Last 28 days of check-ins">
+              {% for day in goal.streak_grid %}
+                <div class="streak-cell {% if day.active %}streak-cell-active{% endif %}"
+                     title="{{ day.date }}{% if day.active %} — checked in{% endif %}"></div>
+              {% endfor %}
+            </div>
+          </section>
+
+          <section class="mood">
+            <header class="stat-head">
+              <h4>Mood timeline</h4>
+              <span class="muted">last {{ goal.mood_timeline|length }} check-in{% if goal.mood_timeline|length != 1 %}s{% endif %}</span>
+            </header>
+            {% if goal.mood_timeline %}
+              <div class="timeline">
+                {% for entry in goal.mood_timeline %}
+                  <span class="mood-dot mood-{{ entry.mood }}"
+                        title="{{ entry.date }} — {{ entry.mood }}"></span>
+                {% endfor %}
+              </div>
+            {% else %}
+              <p class="muted small">No check-ins yet.</p>
+            {% endif %}
+          </section>
+        </div>
+
+        <div class="goal-card-foot">
+          <span class="muted">
+            {% if goal.days_left > 0 %}
+              {{ goal.days_left }} days left · due {{ goal.target_date }}
+            {% elif goal.days_left == 0 %}
+              Due today
+            {% else %}
+              {{ -goal.days_left }} days past due
+            {% endif %}
+          </span>
+          <a class="btn btn-primary btn-sm"
+             href="{{ url_for('coach.checkin_form', goal_id=goal.id) }}">Check in</a>
+        </div>
+
+        <section class="checkin-history">
+          <h4>Recent check-ins</h4>
+          {% if not goal.recent_check_ins %}
+            <p class="muted">No check-ins yet — log one to get a coach reply.</p>
+          {% else %}
+            {% for h in goal.recent_check_ins %}
+              <article class="coach-card coach-{{ h.coach_tone }}">
+                <header class="coach-card-head">
+                  <span class="tone-tag tone-{{ h.coach_tone }}">{{ h.coach_tone }}</span>
+                  <span class="muted">
+                    {{ h.created_at[:10] }} · progress {{ h.progress_value }} · feeling {{ h.mood }}
+                  </span>
+                </header>
+
+                {% if h.note %}
+                  <p class="user-note"><span class="muted">You wrote:</span> &ldquo;{{ h.note }}&rdquo;</p>
+                {% endif %}
+
+                <p class="coach-message">{{ h.coach_message }}</p>
+
+                {% if h.coach_action %}
+                  <div class="coach-action coach-action-{{ h.coach_tone }}">
+                    <span class="action-label">Next step</span>
+                    <span class="action-text">{{ h.coach_action }}</span>
+                  </div>
+                {% endif %}
+
+                <footer class="coach-card-foot muted">
+                  {% if h.coach_assessment %}<span>{{ h.coach_assessment }}</span>{% endif %}
+                  {% if h.coach_next_days %}
+                    <span>· next check-in in {{ h.coach_next_days }} days</span>
+                  {% endif %}
+                </footer>
+              </article>
+            {% endfor %}
+          {% endif %}
+        </section>
+      </article>
+    {% endfor %}
+  </div>
+{% endif %}
+{% endblock %}

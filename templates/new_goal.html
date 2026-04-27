@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}New goal · Accountability Coach{% endblock %}
+{% block content %}
+<section class="form-card">
+  <h1>Set a goal</h1>
+  <p class="muted">Be specific. Specific goals are easier to keep.</p>
+
+  <form method="post" action="{{ url_for('coach.create_goal') }}" novalidate>
+    <label>
+      Your name
+      <input type="text" name="name" maxlength="100" required
+             value="{{ form.get('name', '') }}" autocomplete="off">
+    </label>
+
+    <label>
+      Goal title
+      <input type="text" name="title" maxlength="200" required
+             placeholder="e.g. Read 12 books this year"
+             value="{{ form.get('title', '') }}">
+    </label>
+
+    <label>
+      Why this matters <span class="muted">(optional)</span>
+      <textarea name="description" rows="3" maxlength="1000"
+                placeholder="One or two lines on why you're doing this.">{{ form.get('description', '') }}</textarea>
+    </label>
+
+    <div class="form-row">
+      <label>
+        Target date
+        <input type="date" name="target_date" required
+               min="{{ today }}"
+               value="{{ form.get('target_date', '') }}">
+      </label>
+
+      <label>
+        Target number
+        <input type="number" name="target_value" required min="1" step="1"
+               placeholder="12"
+               value="{{ form.get('target_value', '') }}">
+      </label>
+    </div>
+
+    <div class="form-actions">
+      <button class="btn btn-primary" type="submit">Lock it in</button>
+      <a class="btn btn-ghost" href="{{ url_for('coach.home') }}">Cancel</a>
+    </div>
+  </form>
+</section>
+{% endblock %}

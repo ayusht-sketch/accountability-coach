@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Accountability Coach{% endblock %}
+{% block content %}
+<section class="hero">
+  <h1>Set the goal. Show up. Get coached.</h1>
+  <p class="lead">
+    A quiet little tool for the goals you've been meaning to keep. Define what
+    you're going after, check in honestly, and get a response that meets you
+    where you are.
+  </p>
+  <div class="cta-row">
+    <a class="btn btn-primary" href="{{ url_for('coach.new_goal_form') }}">Set a new goal</a>
+    <a class="btn btn-ghost" href="{{ url_for('coach.dashboard') }}">Check in on existing</a>
+  </div>
+</section>
+
+<section class="features">
+  <div class="feature-card">
+    <h3>Strict by design</h3>
+    <p>No empty goals, no past dates, no mystery numbers. Just the inputs that actually let us coach you.</p>
+  </div>
+  <div class="feature-card">
+    <h3>Coached, not nagged</h3>
+    <p>Four tones — empathy, motivation, celebration, re-engagement — picked from where you actually are.</p>
+  </div>
+  <div class="feature-card">
+    <h3>Honest progress</h3>
+    <p>Real numbers, real dates, real bars. No vanity metrics, no streaks to protect.</p>
+  </div>
+</section>
+{% endblock %}

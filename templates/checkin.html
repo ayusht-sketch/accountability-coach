@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Check in · {{ goal.title }}{% endblock %}
+{% block content %}
+<a class="back-link" href="{{ url_for('coach.dashboard') }}">&larr; Back to dashboard</a>
+
+<section class="form-card">
+  <h1>Check in</h1>
+  <p class="muted">
+    {{ goal.title }} · for {{ goal.name }}
+    · target {{ goal.target_value }} by {{ goal.target_date }}
+  </p>
+
+  <form method="post" action="{{ url_for('coach.submit_checkin', goal_id=goal.id) }}" novalidate>
+    <label>
+      Where are you now? <span class="muted">(0 to {{ goal.target_value }})</span>
+      <input type="number" name="progress_value" min="0" max="{{ goal.target_value }}"
+             step="1" required
+             value="{{ form.get('progress_value', goal.current_value) }}">
+    </label>
+
+    <label>
+      How are you feeling about it?
+      <select name="mood" required>
+        {% for m in moods %}
+          <option value="{{ m }}"
+            {% if form.get('mood') == m %}selected{% endif %}>{{ m }}</option>
+        {% endfor %}
+      </select>
+    </label>
+
+    <label>
+      A short note <span class="muted">(how is it going?)</span>
+      <textarea name="note" rows="3" maxlength="500"
+                placeholder="One or two sentences on what's working, what's not.">{{ form.get('note', '') }}</textarea>
+    </label>
+
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary">Submit check-in</button>
+      <a class="btn btn-ghost" href="{{ url_for('coach.dashboard') }}">Cancel</a>
+    </div>
+  </form>
+</section>
+{% endblock %}
