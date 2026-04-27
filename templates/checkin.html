@@ -14,7 +14,7 @@
     <label>
       Where are you now? <span class="muted">(0 to {{ goal.target_value }})</span>
       <input type="number" name="progress_value" min="0" max="{{ goal.target_value }}"
-             step="1" required
+             step="1" required placeholder=" "
              value="{{ form.get('progress_value', goal.current_value) }}">
     </label>
 

@@ -561,3 +561,147 @@ h3 { font-size: 1.1rem; font-weight: 600; }
 .tone-motivational { background: var(--tone-motivational-soft); color: var(--tone-motivational); }
 .tone-empathy      { background: var(--tone-empathy-soft);      color: var(--tone-empathy); }
 .tone-reengagement { background: var(--tone-reengagement-soft); color: var(--tone-reengagement); }
+
+/* ----- Motivation banner (rotates by overall pace band) ----- */
+.motivation {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 18px;
+  margin-bottom: 28px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  border-left-width: 4px;
+  background: var(--bg-elev);
+}
+.motivation-band {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.motivation-text {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--text);
+}
+.motivation-ahead    { border-left-color: var(--tone-celebration); }
+.motivation-on_track { border-left-color: var(--tone-motivational); }
+.motivation-behind   { border-left-color: var(--tone-empathy); }
+.motivation-ahead    .motivation-band { background: var(--tone-celebration-soft);  color: var(--tone-celebration); }
+.motivation-on_track .motivation-band { background: var(--tone-motivational-soft); color: var(--tone-motivational); }
+.motivation-behind   .motivation-band { background: var(--tone-empathy-soft);      color: var(--tone-empathy); }
+
+/* ----- Last check-in indicator (per goal card) ----- */
+.goal-meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+.last-checkin {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.last-checkin-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 3px rgba(45, 212, 191, 0.18);
+}
+
+/* ----- Progress bar hover tooltip (custom; not the browser default) ----- */
+.progress[data-tooltip] { cursor: default; }
+.progress[data-tooltip]::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  background: var(--bg-elev-2);
+  color: var(--text);
+  font-size: 0.82rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  z-index: 5;
+}
+.progress[data-tooltip]:hover::after,
+.progress[data-tooltip]:focus-within::after {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ----- Form error styling (intentional, not browser default) -----
+   :user-invalid is the right pseudo-class but support is patchy; we fake it
+   with :invalid combined with :not(:placeholder-shown) so errors only show
+   AFTER the user has typed (not on a fresh form). The placeholder=" " on
+   inputs without a real placeholder makes this trick work. */
+.form-card input:invalid:not(:placeholder-shown),
+.form-card textarea:invalid:not(:placeholder-shown) {
+  border-color: var(--danger);
+  box-shadow: 0 0 0 3px rgba(248, 113, 113, 0.14);
+}
+.form-card input:focus:invalid:not(:placeholder-shown),
+.form-card textarea:focus:invalid:not(:placeholder-shown) {
+  border-color: var(--danger);
+  box-shadow: 0 0 0 3px rgba(248, 113, 113, 0.22);
+}
+/* Server-rendered field errors (when the form re-renders with status 400). */
+.field-error {
+  display: block;
+  margin-top: 6px;
+  color: var(--danger);
+  font-size: 0.82rem;
+}
+
+/* ----- Responsive polish ----- */
+@media (max-width: 720px) {
+  .topbar {
+    padding: 14px 18px;
+    flex-wrap: wrap;
+    gap: 8px 16px;
+  }
+  .topbar nav a { margin-left: 0; margin-right: 16px; }
+  .container { padding: 24px 16px 48px; }
+  .hero { padding: 36px 0 28px; margin-bottom: 32px; }
+  .hero h1 { font-size: 1.9rem; }
+  .hero .lead { font-size: 0.98rem; }
+  .dashboard-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .dashboard-header .btn { align-self: flex-start; }
+  .form-card { padding: 20px; }
+  .form-row { grid-template-columns: 1fr; }
+  .goal-card { padding: 18px; }
+  .goal-card-foot {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .motivation { padding: 12px 14px; }
+  .motivation-text { font-size: 0.95rem; }
+}
+
+@media (max-width: 420px) {
+  h1 { font-size: 1.6rem; }
+  .hero h1 { font-size: 1.6rem; }
+  .streak-grid { width: 100%; max-width: 220px; }
+}

@@ -8,7 +8,7 @@
   <form method="post" action="{{ url_for('coach.create_goal') }}" novalidate>
     <label>
       Your name
-      <input type="text" name="name" maxlength="100" required
+      <input type="text" name="name" maxlength="100" required placeholder=" "
              value="{{ form.get('name', '') }}" autocomplete="off">
     </label>
 
@@ -28,7 +28,7 @@
     <div class="form-row">
       <label>
         Target date
-        <input type="date" name="target_date" required
+        <input type="date" name="target_date" required placeholder=" "
                min="{{ today }}"
                value="{{ form.get('target_date', '') }}">
       </label>

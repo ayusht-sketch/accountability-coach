@@ -24,6 +24,33 @@ STREAK_GRID_DAYS = 28
 # Cap on the mood timeline so dense histories don't crush dot spacing.
 MOOD_TIMELINE_MAX = 14
 
+# Quote pools per overall-pace band. Rotate deterministically by date so the
+# banner doesn't re-shuffle on every page reload but does change day to day.
+MOTIVATION_QUOTES = {
+    "behind": [
+        "Restart small. The next move doesn't have to be impressive -- it has to be real.",
+        "Falling behind isn't failing. Quitting is failing.",
+        "What's the smallest possible version of the next step?",
+        "The best time to start was last week. The second-best time is right now.",
+    ],
+    "on_track": [
+        "The boring middle is where most goals are won. You're in it.",
+        "Consistency beats intensity. You're proving it.",
+        "Today's check-in is tomorrow's momentum.",
+        "Steady is the whole game. Keep showing up.",
+    ],
+    "ahead": [
+        "You're not just on pace -- you're ahead. Don't waste this window.",
+        "Momentum is rare. Protect it.",
+        "The streak you're building now is the story you'll tell later.",
+        "Ahead of pace is a privilege of doing the work. Keep going.",
+    ],
+}
+# Tighter +/- 10pt threshold than the per-goal assessment uses; the dashboard
+# banner is a vibe read across all goals, so don't treat one slipping goal as
+# a rallying cry.
+MOTIVATION_BAND_THRESHOLD = 10
+
 
 def _progress_pct(current: int, target: int) -> int:
     if target <= 0:
@@ -111,6 +138,57 @@ def _milestones(pct: int):
     return [{"pct": p, "unlocked": pct >= p} for p in (25, 50, 75, 100)]
 
 
+def _last_checkin_label(rows, today: date) -> str:
+    """Human-readable 'when did they last check in' for the dashboard."""
+    if not rows:
+        return "no check-ins yet"
+    try:
+        last = datetime.fromisoformat(rows[0]["created_at"]).date()
+    except (ValueError, TypeError, KeyError):
+        return "unknown"
+    days = (today - last).days
+    if days <= 0:
+        return "today"
+    if days == 1:
+        return "yesterday"
+    return f"{days} days ago"
+
+
+def _expected_pct(created_at: str, target_date: str, today: date) -> float:
+    """Mirror of coach._expected_progress_pct -- duplicated to keep routes
+    independent of the coach module's internal helpers."""
+    try:
+        start = datetime.fromisoformat(created_at).date()
+        end = date.fromisoformat(target_date)
+    except (ValueError, TypeError):
+        return 0.0
+    total_days = max((end - start).days, 1)
+    elapsed = (today - start).days
+    return max(0.0, min(100.0, (elapsed / total_days) * 100))
+
+
+def _motivation_for(enriched_goals: list[dict], today: date) -> dict | None:
+    """Pick one quote based on average pace across all goals.
+
+    Returns None when there's nothing to motivate (no goals).
+    """
+    if not enriched_goals:
+        return None
+    deltas = []
+    for g in enriched_goals:
+        ep = _expected_pct(g["created_at"], g["target_date"], today)
+        deltas.append(g["progress_pct"] - ep)
+    avg = sum(deltas) / len(deltas)
+    if avg >= MOTIVATION_BAND_THRESHOLD:
+        band = "ahead"
+    elif avg <= -MOTIVATION_BAND_THRESHOLD:
+        band = "behind"
+    else:
+        band = "on_track"
+    pool = MOTIVATION_QUOTES[band]
+    return {"band": band, "text": pool[today.toordinal() % len(pool)]}
+
+
 @bp.route("/")
 def home():
     return render_template("home.html")
@@ -175,8 +253,15 @@ def dashboard():
             "streak_grid": _streak_grid(dates, today),
             "mood_timeline": _mood_timeline(all_checkins),
             "milestones": _milestones(pct),
+            "last_checkin_label": _last_checkin_label(all_checkins, today),
         })
-    return render_template("dashboard.html", goals=enriched, name_filter=name)
+    motivation = _motivation_for(enriched, today)
+    return render_template(
+        "dashboard.html",
+        goals=enriched,
+        name_filter=name,
+        motivation=motivation,
+    )
 
 
 @bp.route("/goals/<int:goal_id>/checkin", methods=["GET"])

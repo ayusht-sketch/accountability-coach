@@ -3,3 +3,8 @@ __pycache__/
 .env
 coach.db
 .claude/
+
+# Cowork task outputs
+daily-coaching-*.md
+weekly-review-*.md
+tasks/cron.log

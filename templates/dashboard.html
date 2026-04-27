@@ -1,6 +1,13 @@
 {% extends "base.html" %}
 {% block title %}Dashboard · Accountability Coach{% endblock %}
 {% block content %}
+{% if motivation %}
+  <aside class="motivation motivation-{{ motivation.band }}" aria-label="Daily motivation">
+    <span class="motivation-band">{{ motivation.band.replace('_', ' ') }}</span>
+    <p class="motivation-text">{{ motivation.text }}</p>
+  </aside>
+{% endif %}
+
 <section class="dashboard-header">
   <div>
     <h1>Your goals</h1>
@@ -36,7 +43,8 @@
           <p class="muted">{{ goal.description }}</p>
         {% endif %}
 
-        <div class="progress" data-band="{{ goal.progress_band }}">
+        <div class="progress" data-band="{{ goal.progress_band }}"
+             data-tooltip="{{ goal.current_value }} out of {{ goal.target_value }}">
           <div class="progress-track">
             <div class="progress-fill"
                  data-band="{{ goal.progress_band }}"
@@ -53,6 +61,13 @@
         <div class="progress-meta">
           <span>{{ goal.current_value }} of {{ goal.target_value }}</span>
           <span class="progress-pct progress-pct-{{ goal.progress_band }}">{{ goal.progress_pct }}%</span>
+        </div>
+
+        <div class="goal-meta-row">
+          <span class="last-checkin" title="Most recent check-in">
+            <span class="last-checkin-dot"></span>
+            Last check-in: {{ goal.last_checkin_label }}
+          </span>
         </div>
 
         <div class="goal-stats">
